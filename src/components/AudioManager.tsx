@@ -367,16 +367,16 @@ function SettingsModal(props: {
 }) {
     const names = Object.values(LANGUAGES).map(titleCase);
 
-    const models = {
+    const models: Record<string, number[]> = {
         // Original checkpoints
-        'Xenova/whisper-tiny': [41, 152],
-        'Xenova/whisper-base': [77, 291],
-        'Xenova/whisper-small': [249],
-        'Xenova/whisper-medium': [776],
+        "Xenova/whisper-tiny": [41, 152],
+        "Xenova/whisper-base": [77, 291],
+        "Xenova/whisper-small": [249],
+        "Xenova/whisper-medium": [776],
 
         // Distil Whisper (English-only)
-        'distil-whisper/distil-medium.en': [402],
-        'distil-whisper/distil-large-v2': [767],
+        "distil-whisper/distil-medium.en": [402],
+        "distil-whisper/distil-large-v2": [767],
     };
     return (
         <Modal
@@ -396,19 +396,20 @@ function SettingsModal(props: {
                             .filter(
                                 (key) =>
                                     props.transcriber.quantized ||
-                                    // @ts-ignore
                                     models[key].length == 2,
                             )
                             .filter(
-                                (key) => (
-                                    !props.transcriber.multilingual || !key.startsWith('distil-whisper/')
-                                )
+                                (key) =>
+                                    !props.transcriber.multilingual ||
+                                    !key.startsWith("distil-whisper/"),
                             )
                             .map((key) => (
                                 <option key={key} value={key}>{`${key}${
-                                    (props.transcriber.multilingual || key.startsWith('distil-whisper/')) ? "" : ".en"
+                                    props.transcriber.multilingual ||
+                                    key.startsWith("distil-whisper/")
+                                        ? ""
+                                        : ".en"
                                 } (${
-                                    // @ts-ignore
                                     models[key][
                                         props.transcriber.quantized ? 0 : 1
                                     ]
@@ -485,7 +486,7 @@ function SettingsModal(props: {
                 </>
             }
             onClose={props.onClose}
-            onSubmit={() => {}}
+            onSubmit={props.onClose}
         />
     );
 }
@@ -581,11 +582,11 @@ function FileTile(props: {
     // const audioPlayer = useRef<HTMLAudioElement>(null);
 
     // Create hidden input element
-    let elem = document.createElement("input");
+    const elem = document.createElement("input");
     elem.type = "file";
     elem.oninput = (event) => {
         // Make sure we have files to use
-        let files = (event.target as HTMLInputElement).files;
+        const files = (event.target as HTMLInputElement).files;
         if (!files) return;
 
         // Create a blob that we can use as an src for our audio element

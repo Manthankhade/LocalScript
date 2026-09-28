@@ -252,14 +252,18 @@ class WebmBase<T> {
 
     constructor(private name = "Unknown", private type = "Unknown") {}
 
-    updateBySource() {}
+    updateBySource() {
+        return;
+    }
 
     setSource(source: Uint8Array) {
         this.source = source;
         this.updateBySource();
     }
 
-    updateByData() {}
+    updateByData() {
+        return;
+    }
 
     setData(data: T) {
         this.data = data;
@@ -316,7 +320,7 @@ class WebmFloat extends WebmBase<number> {
     updateBySource() {
         const byteArray = this.source!.reverse();
         const floatArrayType = this.getFloatArrayType();
-        const floatArray = new floatArrayType(byteArray.buffer);
+        const floatArray = new floatArrayType(byteArray.buffer as ArrayBuffer);
         this.data! = floatArray[0];
     }
     updateByData() {
@@ -340,7 +344,7 @@ interface ContainerData {
 }
 
 class WebmContainer extends WebmBase<ContainerData[]> {
-    offset: number = 0;
+    offset = 0;
     data: ContainerData[] = [];
 
     constructor(name: string, type: string) {
@@ -397,11 +401,12 @@ class WebmContainer extends WebmBase<ContainerData[]> {
         }
     }
     writeUint(x: number, draft = false) {
-        for (
-            var bytes = 1, flag = 0x80;
-            x >= flag && bytes < 8;
-            bytes++, flag *= 0x80
-        ) {}
+        let bytes = 1;
+        let flag = 0x80;
+        while (x >= flag && bytes < 8) {
+            bytes++;
+            flag *= 0x80;
+        }
 
         if (!draft) {
             let value = flag + x;
@@ -505,7 +510,7 @@ class WebmFile extends WebmContainer {
     }
 
     toBlob(type = "video/webm") {
-        return new Blob([this.source!.buffer], { type });
+        return new Blob([this.source!.buffer as ArrayBuffer], { type });
     }
 }
 

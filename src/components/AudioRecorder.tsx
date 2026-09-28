@@ -36,7 +36,7 @@ export default function AudioRecorder(props: {
         // Reset recording (if any)
         setRecordedBlob(null);
 
-        let startTime = Date.now();
+        const startTime = Date.now();
 
         try {
             if (!streamRef.current) {
@@ -91,8 +91,6 @@ export default function AudioRecorder(props: {
     };
 
     useEffect(() => {
-        let stream: MediaStream | null = null;
-
         if (recording) {
             const timer = setInterval(() => {
                 setDuration((prevDuration) => prevDuration + 1);
@@ -100,14 +98,10 @@ export default function AudioRecorder(props: {
 
             return () => {
                 clearInterval(timer);
+                streamRef.current?.getTracks().forEach((track) => track.stop());
+                streamRef.current = null;
             };
         }
-
-        return () => {
-            if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
-            }
-        };
     }, [recording]);
 
     const handleToggleRecording = () => {

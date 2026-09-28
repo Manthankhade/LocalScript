@@ -1,17 +1,17 @@
 {
-  "name": "whisper-web",
+  "name": "LocalScript",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node ./node_modules/vite/bin/vite.js",
     "clean": "rm -rf node_modules/ dist/",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
-    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
+    "build": "node ./node_modules/typescript/bin/tsc && node ./node_modules/vite/bin/vite.js build",
+    "preview": "node ./node_modules/vite/bin/vite.js preview",
+    "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*.{js,jsx,ts,tsx,json}",
+    "lint:fix": "node ./node_modules/eslint/bin/eslint.js --fix src/**/*.{js,jsx,ts,tsx,json}",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc",
-    "tsc": "tsc"
+    "tsc": "node ./node_modules/typescript/bin/tsc"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",

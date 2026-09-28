@@ -16,3 +16,94 @@ audio::-webkit-media-controls-panel {
     width: 41rem /* 656px */;
     max-width: 95vw;
 }
+
+.app-shell {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 3rem 0;
+    background-color: #f8faf9;
+    transition: background-color 500ms ease;
+}
+
+.app-shell::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(
+            135deg,
+            transparent 0 34px,
+            rgba(13, 148, 136, 0.055) 35px,
+            transparent 36px 72px
+        ),
+        repeating-linear-gradient(
+            45deg,
+            transparent 0 78px,
+            rgba(234, 88, 12, 0.035) 79px,
+            transparent 80px 156px
+        );
+    background-size: 180% 180%;
+    content: "";
+    opacity: 0.5;
+    pointer-events: none;
+    animation: texture-drift 26s ease-in-out infinite alternate;
+    transition: opacity 500ms ease, background-size 700ms ease;
+}
+
+.app-shell:hover {
+    background-color: #f1f8f6;
+}
+
+.app-shell:hover::before {
+    background-size: 150% 150%;
+    opacity: 0.85;
+}
+
+.page-content {
+    position: relative;
+    z-index: 1;
+    animation: page-enter 700ms cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+
+.page-title {
+    animation: page-enter 700ms 80ms cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+
+.page-subtitle {
+    animation: page-enter 700ms 160ms cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+
+@keyframes texture-drift {
+    from {
+        background-position: 0% 0%;
+    }
+
+    to {
+        background-position: 100% 80%;
+    }
+}
+
+@keyframes page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-shell,
+    .app-shell::before,
+    .page-content,
+    .page-title,
+    .page-subtitle {
+        animation: none;
+        transition: none;
+    }
+}
